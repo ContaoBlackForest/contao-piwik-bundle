@@ -19,11 +19,14 @@
 
 namespace ContaoBlackForest\PiwikBundle\ContaoManager;
 
+use BlackForest\PiwikBundle\BlackForestPiwikBundle;
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use ContaoBlackForest\PiwikBundle\ContaoBlackForestContaoPiwikBundle;
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle;
 
 /**
  * Contao Manager plugin.
@@ -36,10 +39,31 @@ class Plugin implements BundlePluginInterface
     public function getBundles(ParserInterface $parser)
     {
         return [
-            BundleConfig::create(ContaoBlackForestContaoPiwikBundle::class)
+            BundleConfig::create(DoctrineBundle::class)
                 ->setLoadAfter(
                     [
                         ContaoCoreBundle::class
+                    ]
+                ),
+            BundleConfig::create(StofDoctrineExtensionsBundle::class)
+                ->setLoadAfter(
+                    [
+                        ContaoCoreBundle::class,
+                        DoctrineBundle::class
+                    ]
+                ),
+            BundleConfig::create(BlackForestPiwikBundle::class)
+                ->setLoadAfter(
+                    [
+                        ContaoCoreBundle::class,
+                        DoctrineBundle::class
+                    ]
+                ),
+            BundleConfig::create(ContaoBlackForestContaoPiwikBundle::class)
+                ->setLoadAfter(
+                    [
+                        ContaoCoreBundle::class,
+                        BlackForestPiwikBundle::class
                     ]
                 )
         ];
